@@ -110,3 +110,7 @@ wget https://github.com/m5stack/M5Cloud/raw/master/firmwares/OFF-LINE/m5stack-20
 esptool.py --chip esp32 --port /dev/ttyS3 erase_flash
 esptool.py --chip esp32 --port /dev/ttyS3 write_flash --flash_mode dio -z 0x1000 m5stack-20180516-v0.4.0.bin
 ```
+
+Medium に転載済み。
+
+- [M5Stack で MicroPython を使う - oka - Medium](https://medium.com/@oka/m5stack-%E3%81%A7-micropython-%E3%82%92%E4%BD%BF%E3%81%86-9a03e8be7ce)
