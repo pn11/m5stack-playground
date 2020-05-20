@@ -14,9 +14,9 @@ M5Stack を MicroPython で動かすには以下の3つ方法がありそう
 
 WSL2 は USB 使えない。
 
-ー[WSL 2 についてよく寄せられる質問 | Microsoft Docs](https://docs.microsoft.com/ja-jp/windows/wsl/wsl2-faq#can-i-access-the-gpu-in-wsl-2-are-there-plans-to-increase-hardware-support)
+- [WSL 2 についてよく寄せられる質問 | Microsoft Docs](https://docs.microsoft.com/ja-jp/windows/wsl/wsl2-faq#can-i-access-the-gpu-in-wsl-2-are-there-plans-to-increase-hardware-support)
 
-WSL 1では以下のようにシリアル通信できる。 driver は Windows 側に入れれば良い。
+WSL 1では以下のように serial 通信できる。 driver は Windows 側に入れれば良い。
 
 - [Serial Support on the Windows Subsystem for Linux | Microsoft Docs](https://docs.microsoft.com/en-us/archive/blogs/wsl/serial-support-on-the-windows-subsystem-for-linux)
 
@@ -39,11 +39,13 @@ sudo apt-get install git wget make libncurses-dev flex bison gperf python python
 git clone --depth 1 https://github.com/m5stack/M5Stack_MicroPython
 ```
 
+で必要 package を install して、repository を clone してくる。以下で build の設定。
+
 ```sh
 ./BUILD.sh menuconfig
 ```
 
-で以下2つを実施
+この中で以下の2つを実施
 
 - `Serial Flasher Config` --> `Default serial Port` を変更 (私の場合は /dev/ttyS3)
 - `MicroPython --> Modules --> Use Display module` を確認
@@ -98,7 +100,7 @@ ampy --port /dev/ttyS3 put test.py /flash/main.py
 
 - [M5StackでセンサーデーターをAmbientに送る (MicroPython編) – Ambient](https://ambidata.io/samples/m5stack/m5stack-micropython/)
 
-を見てやろうとしたけど、v0.3.4 が repository から消えていたり、Wi-Fi は ESSID を登録できなそうだったりしたのでやめた。一応、以下の手順で firmware 書き込みはできた。
+を見てやろうとした。v0.3.4 が repository から消えていたので commit 履歴から見つけてきて入れたけど、Wi-Fi は ESSID を登録できなそうだったりしたのでやめた。一応、以下のような手順 (0.4.0 の場合)で firmware 書き込みはできた。
 
 ```sh
 pip install esptool
