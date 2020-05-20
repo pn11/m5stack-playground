@@ -16,13 +16,15 @@ WSL2 は USB 使えない。
 
 - [WSL 2 についてよく寄せられる質問 | Microsoft Docs](https://docs.microsoft.com/ja-jp/windows/wsl/wsl2-faq#can-i-access-the-gpu-in-wsl-2-are-there-plans-to-increase-hardware-support)
 
-WSL 1では以下のように serial 通信できる。 driver は Windows 側に入れれば良い。
+WSL 1では以下のように serial 通信できる。 
 
 - [Serial Support on the Windows Subsystem for Linux | Microsoft Docs](https://docs.microsoft.com/en-us/archive/blogs/wsl/serial-support-on-the-windows-subsystem-for-linux)
 
+CP210X driver は Windows 側に入れれば良い。
+
+- [Download – m5stack-store](https://m5stack.com/pages/download)
 
 ## M5Stack_MicroPython Firmware の導入
-
 
 主に以下2つを見て行う。
 
@@ -33,13 +35,14 @@ WSL 1では以下のように serial 通信できる。 driver は Windows 側�
 
 - [M5Stack用MicroPythonのビルドとカスタマイズ - Qiita](https://qiita.com/ciniml/items/1378d02bc14098b959ef)
 
+まず必要 package を install して、repository を clone してくる。
 
 ```sh
 sudo apt-get install git wget make libncurses-dev flex bison gperf python python-serial
 git clone --depth 1 https://github.com/m5stack/M5Stack_MicroPython
 ```
 
-で必要 package を install して、repository を clone してくる。以下で build の設定。
+次に build の設定。
 
 ```sh
 ./BUILD.sh menuconfig
@@ -47,7 +50,7 @@ git clone --depth 1 https://github.com/m5stack/M5Stack_MicroPython
 
 この中で以下の2つを実施
 
-- `Serial Flasher Config` --> `Default serial Port` を変更 (私の場合は /dev/ttyS3)
+- `Serial Flasher Config` --> `Default serial Port` を変更 (私の場合は `/dev/ttyS3`、以下も同様)
 - `MicroPython --> Modules --> Use Display module` を確認
 
 終わったら Exit して
@@ -94,7 +97,6 @@ ampy --port /dev/ttyS3 put test.py /flash/main.py
 ```
 
 のようにすると転送する。 `/flash/main.py` は M5Stack が起動したときに実行される。
-
 
 ## M5Cloud をやろうとしたメモ
 
