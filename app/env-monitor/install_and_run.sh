@@ -9,6 +9,7 @@ ampy put main.py
 ampy put settings.json
 ampy put ambient.py
 ampy put ntptime_custom.py
+ampy put wifi.py
 
 if [ $? != 0 ]; then
     exit

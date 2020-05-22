@@ -9,12 +9,10 @@ import time
 
 import ambient
 import ntptime_custom
+import wifi
 
 setScreenColor(0x000000)
 env0 = unit.get(unit.ENV, unit.PORTA)
-
-NTRIAL = 100
-wlan = network.WLAN()
 
 with open('settings.json') as f:
     settings = json.load(f)
@@ -23,24 +21,7 @@ ssid = settings['ssid']
 password = settings['password']
 am = ambient.Ambient(settings['ambient channel id'], settings['ambient write key'])
 
-if not wlan.active():
-    for _ in range(NTRIAL):
-        wlan.active(True)
-        if wlan.active():
-            break
-        lcd.print('.')
-        time.sleep(0.1)
-
-if not wlan.isconnected():
-    for _ in range(NTRIAL):
-        wlan.connect(ssid, password)
-        if wlan.isconnected():
-            lcd.println('Connected.')
-            lcd.println(wlan.ifconfig())
-            break
-        lcd.print('.')
-        time.sleep(1.0)
-
+wifi.connect(ssid, password, num_trial=100)
 ntptime_custom.settime(9*60*60) # +09:00:00 for JST
 lt = utime.localtime()
 

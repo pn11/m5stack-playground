@@ -1,6 +1,7 @@
 '''無線LANに接続し、NTP で時刻同期する。
 無線LANはつながらないことがあるので運ゲー。連続して try しても失敗するので、sleep(1)とかしてやると良い？
 NTP は JST にするとなぜかずれるので CST にしてる。
+m5stack_micropython で動く。UIFlow では動かない。
 '''
 import network
 import time
