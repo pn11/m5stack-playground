@@ -5,6 +5,7 @@ import unit
 import network
 import utime
 import json
+import os
 import time
 
 import ambient
@@ -13,6 +14,12 @@ import wifi
 
 setScreenColor(0x000000)
 env0 = unit.get(unit.ENV, unit.PORTA)
+
+is_sd_ok = True
+try:
+    os.listdir('/sd')
+except Exception:
+    is_sd_ok = False
 
 with open('settings.json') as f:
     settings = json.load(f)
@@ -47,16 +54,26 @@ import random
 
 random2 = None
 i = None
+last_sent = 0
 
 while True:
   label3.setText(str(env0.temperature))
   label4.setText(str(env0.pressure))
   label5.setText(str(env0.humidity))
   lt = utime.localtime()
-  label_time.setText("{:04d}/{:02d}/{:02d} {:02d}:{:02d}:{:02d}".format(*lt))
-  r = am.send({'d1': env0.temperature, 'd2': env0.pressure, 'd3': env0.humidity})
-  r.close()
-  wait(1.0)
+  ltepoch = utime.time()
+  ltstring = "{:04d}/{:02d}/{:02d} {:02d}:{:02d}:{:02d}".format(*lt)
+  label_time.setText(ltstring)
+
+  if is_sd_ok:
+      with open("/sd/env{:04d}{:02d}{:02d}.tsv".format(*lt), 'a') as f:
+          f.write("{}\t{}\t{}\t{}\t{}\n".format(ltepoch, env0.temperature, env0.pressure, env0.humidity, ltstring))
+
+  if ltepoch - last_sent > 30:
+      # Ambient に送るのは30秒間隔
+      r = am.send({'d1': env0.temperature, 'd2': env0.pressure, 'd3': env0.humidity})
+      r.close()
+      last_sent = ltepoch
   if (env0.humidity) >= 50:
     circle4.setBgColor(0x000000)
     rgb.setColorAll(0x000099)
@@ -84,4 +101,4 @@ while True:
       lcd.circle(56, 61, (i - 1), color=0x000000)
       wait(0.05)
     lcd.circle(56, 61, 30, color=0x000000)
-  wait_ms(2)
+  time.sleep(0.5)
