@@ -1,6 +1,6 @@
 {
-    "ssid": "YOUR SSID",
-    "password": "YOUR Wi-Fi PASSWORD"
-    "ambient channel id": YOUR CHANNEL ID (INTEGER),
-    "ambient write key": "YOUR WRITE KEY"
+    "ssid": "shikamaro",
+    "password": "manamana2shikamaro",
+    "ambient channel id": 26938,
+    "ambient write key": "670b712f491a652b"
 }

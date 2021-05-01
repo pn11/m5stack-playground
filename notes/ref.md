@@ -9,6 +9,11 @@
 
 - [M5GO(M5Stack)で気温・湿度・気圧・CO2濃度メーター＆時計表示 - Qiita](https://qiita.com/inasawa/items/a1830266c1eceb714884)
 
+## Arduino / Platform IO
+
+- [M5Stackの開発環境を整える - PlatformIO IDE編 - Qiita](https://qiita.com/lutecia16v/items/1c560bdd7eac7ebeaff7)
+  - 最終更新3年前の記事だけど今でもほぼこの通りで行けた！
+
 ## LovyanLaucher
 
 - [初心者向けM5Stackの始め方（M5Burner/LovyanLauncher編） | ラズパイ好きの日記](https://raspberrypi.mongonta.com/howto-start-m5stack-m5burner-lovyanlauncher/)

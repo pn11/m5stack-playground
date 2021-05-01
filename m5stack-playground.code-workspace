@@ -2,6 +2,10 @@
 	"folders": [
 		{
 			"path": "."
+		},
+		{
+			"name": "co2-monitor",
+			"path": "arduino/co2-monitor"
 		}
 	],
 	"settings": {}
