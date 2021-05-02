@@ -8,5 +8,9 @@
 			"path": "arduino/co2-monitor"
 		}
 	],
-	"settings": {}
+	"settings": {
+		"files.associations": {
+			"__locale": "cpp"
+		}
+	}
 }
