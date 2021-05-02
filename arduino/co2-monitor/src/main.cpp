@@ -1,58 +1,52 @@
 #include <M5Stack.h>
+#include "MHZ19.h"                                        
 
-// the setup routine runs once when M5Stack starts up
-void setup() {
-  
-  // initialize the M5Stack object
-  M5.begin();
+#define RX_PIN 16
+#define TX_PIN 17
+#define BAUDRATE 9600
 
-  /*
-    Power chip connected to gpio21, gpio22, I2C device
-    Set battery charging voltage and current
-    If used battery, please call this function in your project
-  */
-  M5.Power.begin();
-  
-  // Lcd display
-  M5.Lcd.fillScreen(WHITE);
-  delay(500);
-  M5.Lcd.fillScreen(RED);
-  delay(500);
-  M5.Lcd.fillScreen(GREEN);
-  delay(500);
-  M5.Lcd.fillScreen(BLUE);
-  delay(500);
-  M5.Lcd.fillScreen(BLACK);
-  delay(500);
+#define DELAY 2000
+#define GRAPH_MAX 3000
+#define GRAPH_MIN 1
+#define GRAPH_X 0
+#define GRAPH_Y 40
+#define GRAPH_HEIGHT 200
+#define GRAPH_WIDTH 320
+#define GRAPH_WARN_HEIGHT 132
 
-  // text print
-  M5.Lcd.fillScreen(BLACK);
-  M5.Lcd.setCursor(10, 10);
-  M5.Lcd.setTextColor(WHITE);
-  M5.Lcd.setTextSize(1);
-  M5.Lcd.printf("Display Test!");
+MHZ19 myMHZ19;
+HardwareSerial mySerial(1);
+TFT_eSprite graph = TFT_eSprite(&M5.Lcd);
 
-  // draw graphic
-  delay(1000);
-  M5.Lcd.drawRect(100, 100, 50, 50, BLUE);
-  delay(1000);
-  M5.Lcd.fillRect(100, 100, 50, 50, BLUE);
-  delay(1000);
-  M5.Lcd.drawCircle(100, 100, 50, RED);
-  delay(1000);
-  M5.Lcd.fillCircle(100, 100, 50, RED);
-  delay(1000);
-  M5.Lcd.drawTriangle(30, 30, 180, 100, 80, 150, YELLOW);
-  delay(1000);
-  M5.Lcd.fillTriangle(30, 30, 180, 100, 80, 150, YELLOW);
+void setup(){
+    M5.begin();
+    M5.Lcd.setTextSize(3);
+    Serial.begin(9600);
 
+    mySerial.begin(BAUDRATE, SERIAL_8N1, RX_PIN, TX_PIN);
+    myMHZ19.begin(mySerial);
+    myMHZ19.autoCalibration();
+
+    graph.setColorDepth(8);
+    graph.createSprite(GRAPH_WIDTH, GRAPH_HEIGHT + 1);
+    graph.fillSprite(TFT_BLACK);
+    graph.fillRect(0, 0, GRAPH_WIDTH, GRAPH_WARN_HEIGHT, M5.Lcd.color565(152, 152, 0));
+    graph.pushSprite(GRAPH_X, GRAPH_Y);
 }
 
-// the loop routine runs over and over again forever
 void loop(){
+    M5.Lcd.setCursor(0, 0);
 
-  //rand draw 
-  M5.Lcd.fillTriangle(random(M5.Lcd.width()-1), random(M5.Lcd.height()-1), random(M5.Lcd.width()-1), random(M5.Lcd.height()-1), random(M5.Lcd.width()-1), random(M5.Lcd.height()-1), random(0xfffe));
+    int CO2 = myMHZ19.getCO2();
+    M5.Lcd.print("CO2: ");
+    M5.Lcd.print(CO2);
+    M5.Lcd.println("ppm ");
 
-  M5.update();
+    graph.pushSprite(GRAPH_X, GRAPH_Y);
+    graph.scroll(-1, 0);
+    graph.fillRect(GRAPH_WIDTH -1, 0, GRAPH_WIDTH, GRAPH_WARN_HEIGHT, M5.Lcd.color565(152, 152, 0));
+    int p = CO2 / (GRAPH_MAX / GRAPH_HEIGHT);
+    graph.drawPixel(GRAPH_WIDTH -1, GRAPH_HEIGHT - p, TFT_WHITE);
+
+    delay(DELAY);
 }
